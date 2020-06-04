@@ -28,7 +28,6 @@ void setColor(uint8 R, uint8 G, uint8 B) {
     leds.setPixelColor(i, leds.Color(R, G, B));
   }
   leds.show();
-//  delay(50);
 }
 
 void updateDevice(const String& status, const String& statusDetail) {
@@ -38,7 +37,7 @@ void updateDevice(const String& status, const String& statusDetail) {
     myStatus = status;
     myStatusDetail = statusDetail;
 
-    String color = "";
+    String color = "grey";
 
     if (myStatus == "busy") {
       color = "red";
@@ -61,7 +60,8 @@ void updateDevice(const String& status, const String& statusDetail) {
       statuslightNode.setProperty("color").send(myColor);
     }
 
-    Homie.getLogger() << "Wrinting to dispay: " << myStatus << " - " << myStatusDetail << endl;
+    Homie.getLogger() << "Status: " << myStatus << " - " << myStatusDetail << endl;
+    Homie.getLogger() << "Color: " << myColor << endl;
     
   }
 
@@ -97,24 +97,19 @@ void onHomieEvent(const HomieEvent& event) {
       break;
     case HomieEventType::WIFI_CONNECTED:
       Serial << "Wi-Fi connected, IP: " << event.ip << ", gateway: " << event.gateway << ", mask: " << event.mask << endl;
-//      myStatusDetail = "WiFi ok, MQTT...";
       updateDevice(myStatus, "WiFi ok, MQTT...");
       break;
     case HomieEventType::WIFI_DISCONNECTED:
       Serial << "Wi-Fi disconnected, reason: " << (int8_t)event.wifiReason << endl;
       myStatus = "error";
-//      myStatusDetail = "Wifi disconnected";
       updateDevice(myStatus, "Wifi disconnected");
       break;
     case HomieEventType::MQTT_READY:
       Serial << "MQTT connected" << endl;
-//      myStatusDetail = "MQTT connected";
       updateDevice(myStatus, "MQTT connected");
       break;
     case HomieEventType::MQTT_DISCONNECTED:
       Serial << "MQTT disconnected, reason: " << (int8_t)event.mqttReason << endl;
-//      myStatus = "error";
-//      myStatusDetail = "MQTT disconnected";
       updateDevice("error", "MQTT disconnected");
       break;
     case HomieEventType::READY_TO_SLEEP:
@@ -162,13 +157,11 @@ void loopHandler() {
 }
 
 void setup() {
-//  Serial.begin(115200);
-
   Homie_setBrand("SL");
   Homie.setResetTrigger(0, LOW, 2000);
   Serial.begin(115200);
   Serial << endl << endl;
-  Homie_setFirmware("SLON-RGB-LED", "0.0.2");
+  Homie_setFirmware("SLON-RGB-LED", "0.0.3");
   Homie.setLoopFunction(loopHandler);
   statuslightNode.advertise("status").setName("Status").setDatatype("string").settable();
   statuslightNode.advertise("statusdetail").setName("StatusDetail").setDatatype("string").settable();
@@ -198,16 +191,5 @@ void led_set(uint8 R, uint8 G, uint8 B) {
 }
 
 void loop() {
-/*
-  led_set(10, 0, 0);//red
-  led_set(0, 0, 0);
-
-  led_set(0, 10, 0);//green
-  led_set(0, 0, 0);
-
-  led_set(0, 0, 10);//blue
-  led_set(0, 0, 0);
-*/
   Homie.loop();
-
 }
