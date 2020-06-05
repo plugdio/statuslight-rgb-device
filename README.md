@@ -13,3 +13,6 @@ After you have built the code and uploaded it to your device:
 1. Turn on the device. It will create a new wifi network with the name SL-xxxxxxx.
 2. Connect to that network and follow the steps in the configuration UI: select the wifi network that the device should use, enter the password for it, and enter your PIN number.
 3. Then your device will reboot and it’s ready to be used.
+
+<img src="https://github.com/plugdio/statuslight-app/raw/master/src/ui/assets/img/ui-12.PNG" width="550">
+<img src="https://github.com/plugdio/statuslight-app/raw/master/src/ui/assets/img/ui-34.PNG" width="550">
